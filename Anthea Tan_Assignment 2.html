@@ -1,0 +1,1520 @@
+    <!DOCTYPE html>
+
+        <title>Escape 404: Code (Un)Locked.</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    
+    <style>
+        
+        body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Orbitron', sans-serif;
+        color: #f2f2f2;
+        overflow: hidden;
+        }
+
+        #container {
+        width: 960px;
+        height: 540px;
+        position: relative;
+        top: 0;
+        left: 0;
+        transform: none;
+        background: black;
+        overflow: hidden;
+        }
+
+        #screen {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        background: url(airplane.jpg) no-repeat center center/cover;
+        display: none;
+        z-index: 50;
+        }
+        
+        #background-video {
+        position: fixed;
+        top: 50%;
+        left: 55%;
+        min-width: 110%;
+        min-height: 115%;
+        width: auto;
+        height: auto;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        z-index: -1;
+        opacity: 0.92;
+        }
+
+        #intro {
+        z-index: 10;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: none;
+        background: transparent;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        margin-top: 80px;
+        margin-left: -35px;
+        }
+
+        #cover-video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: 100%;
+        height: auto;
+        transform: translate(-50%, -50%);
+        object-fit: cover;
+        z-index: 1;
+        }
+
+        #cover-video.fade-out {
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
+        }
+
+
+        #instructions {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: none;
+        display: none;
+        background: black;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 20px;
+        margin-left: -25px;
+        z-index: 15;
+        }
+
+        #skip-button {
+        position: fixed;
+        bottom: 80px;
+        left: 49%;
+        transform: translateX(-50%);
+        padding: 0.75rem 1.5rem;
+        margin-top: 0.75rem;
+        font-size: 1rem;
+        background: #00adb5;
+        border: none;
+        color: black;
+        border-radius: 7px;
+        cursor: pointer;
+        z-index: 20;
+        }
+
+        #skip-button:hover {
+        background: #32e0c4;    
+        }
+
+        #timer {
+        display: none;
+        position: absolute;
+        top: 20px;
+        right: 35px;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.8rem;
+        color: #00f2fe;
+        text-shadow: 0 0 8px #00f2fe;
+        box-shadow: 0 0 15px #00ccd7;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 0.3rem 0.8rem;
+        border-radius: 8px;
+        z-index: 55;
+        user-select: none;
+        }
+
+        #instructions-btn {
+        display: none;
+        position: absolute; 
+        top: 10px; 
+        right: 775px; 
+        z-index: 40;
+        padding: 1rem;
+        font-size: 1rem;
+        background: rgba(0,0,0,0.7);
+        opacity: 70%;
+        color: #00f2fe;
+        text-shadow: 0 0 8px #00f2fe;
+        }
+
+        #instructions-btn:hover {
+        background: rgba(50, 224, 196, 0.8);
+        color: black;
+        text-shadow: 0 0 8px white;
+        }
+
+        #instructions-overlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        opacity: 90%;
+        color: white;
+        z-index: 60;
+        overflow-y: auto;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 13%;
+        text-align: center;
+        padding-left: 0rem;
+        padding-right: 2rem;
+        flex-direction: column;
+        }
+
+        #clue-btn {
+        position: absolute; 
+        top: 10px; 
+        right: 675px;
+        z-index: 30;
+        padding: 1rem;
+        font-size: 1rem;
+        background: rgba(0,0,0,0.7);
+        opacity: 75%;
+        color: #00f2fe;
+        text-shadow: 0 0 8px #00f2fe;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+        }
+
+        #clue-btn:hover {
+        background: rgba(50, 224, 196, 0.8);
+        color: black;
+        text-shadow: 0 0 8px white;
+        }
+
+        #clue-overlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.95);
+        opacity: 90%;
+        color: white;
+        z-index: 60;
+        overflow-y: auto;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 10%;
+        padding-left: -22%;
+        text-align: center;
+        flex-direction: column;
+        }
+
+        .hidden {
+        display: none;
+        }
+
+        h1 {
+        margin: 2rem;
+        font-size: 3rem;
+        }
+
+        h2 {
+        margin: 1rem;
+        font-size: 1.3rem;
+
+        }
+
+        p {
+        margin: 0.7rem;
+        }
+
+        #instructions h1 {
+        margin: 2.5rem 1;
+        font-size: 3.3rem;
+        padding-top: 45px;
+        }
+
+        #instructions p {
+        font-size: 1.1rem;
+        }
+
+        #clue-overlay h2 {
+        margin: 0.7rem;
+        font-size: 2rem;
+        }
+
+        button {
+        padding: 1rem 2rem;
+        margin-top: 1rem;
+        font-size: 1.2rem;
+        background: #00adb5;
+        border: none;
+        color: black;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 15px #00ccd7;
+
+        }
+
+        button:hover {
+        background: #32e0c4;
+        }
+
+        .hotspot {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        cursor: pointer;
+        border-radius: 15px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .hotspota {
+        position: absolute;
+        width: 135px;
+        height: 130px;
+        cursor: pointer;
+        border-radius: 15px;
+        }
+
+        #textbox {
+        display: none;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.8);
+        padding: 1rem 2rem;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        font-size: 1.2rem;
+        text-align: center;
+        min-height: 120px;
+        width: 90%;
+        max-width: 860px;
+        overflow-y: auto;
+        z-index: 55;
+        }
+
+        #textbox h3 {
+        margin: 0.5rem 0;
+        }
+
+        .answer-btn {
+        display: block;
+        width: 100%;
+        background: #00adb5;
+        border: none;
+        color: black;
+        border-radius: 10px;
+        padding: 0.7rem;
+        margin: 0.3rem 0;
+        font-size: 1rem;
+        cursor: pointer;
+        text-align: left;
+        }
+
+        .answer-btn:hover {
+        background: #32e0c4;
+        }
+
+        .explanation {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        font-style: italic;
+        color: #ccc;
+        }
+
+        .pulse-glow {
+        animation: pulseGlow 1s infinite, pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+        0% {
+            box-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 30px #00f2fe;
+        }
+        50% {
+            box-shadow: 0 0 20px #239d88, 0 0 30px #239d88, 0 0 40px #239d88;
+        }
+        100% {
+            box-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 30px #00f2fe;
+        }
+        }
+
+        @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+        }
+
+        .pulse {
+        animation: pulse 1.5s infinite ease-in-out;
+        }
+
+
+        #enter-cockpit-btn {
+        position: absolute;
+        bottom: 380px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 1rem 2rem;
+        font-size: 1.5rem;
+        background: #00adb5;
+        border: none;
+        color: black;
+        border-radius: 12px;
+        cursor: pointer;
+        z-index: 50;
+        animation: pulseGlow 1s infinite;
+        }
+
+        #code-entry {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 19%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #111;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 20px #00f2fe;
+        z-index: 60;
+        width: 460px;
+        height: 35vw;
+        max-width: 100%;
+        }
+
+        #code-entry input {
+        font-size: 2rem;
+        text-align: center;
+        letter-spacing: 1rem;
+        width: 15rem;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        border: none;
+        padding: 0.2rem 0;
+        }
+
+        #escape-msg {
+        font-size: 2rem;
+        color: #66c308;
+        margin-top: 1rem;
+        min-height: 2.5rem;
+        }
+
+        #code-lock {
+        position: absolute;
+        top: 20px;
+        left: 480px;
+        transform: translateX(-50%);
+        font-family: 'Orbitron', monospace;
+        font-size: 2.5rem;
+        text-align: center;
+        letter-spacing: 0.6rem;
+        color: #00f2fe;
+        text-shadow: 0 0 8px #00f2fe;
+        user-select: none;
+        z-index: 50;
+        background: rgba(0,0,0,0.7);
+        padding: 0.3rem 1rem;
+        border-radius: 10px;
+        display: none;
+        }
+
+        #success-screen-message {
+        display: none; 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%); 
+        color: white; 
+        text-align: center; 
+        z-index: 999;  
+        border-radius: 10px;
+        background: url(city.png);
+        width: 100%;
+        height: 100%;
+        }
+
+        #end-screen-message {
+        display: none;
+        position: fixed;
+        top: -290px;
+        left: -500px;
+        width: 1000px;
+        height: 569px;
+        background: url(city.png) center/cover no-repeat;
+        z-index: 9999;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        }
+
+        #end-screen-message h1 {
+        font-size: 3rem;
+        }
+
+        #end-screen-message p {
+        font-size: 2rem;
+        padding: 0.8;
+        }
+
+        #end-screen-message h1,
+        #end-screen-message p,
+        #end-screen-message button {
+            position: relative;
+            z-index: 10000;
+        }
+
+        @keyframes flashSirenGlow {
+        0%, 100% {
+            box-shadow: 0 0 0px rgba(255, 0, 0, 0);
+        }
+        50% {
+            box-shadow: 0 0 40px 50px rgba(255, 0, 0, 0.8);
+        }
+        }
+
+        .flash-siren {
+        animation: flashSirenGlow 1s ease infinite;
+        }
+
+        @keyframes turbulenceShake {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            10% { transform: translate(calc(-50% + 0.3%), calc(-50% - 0.3%)) rotate(-0.2deg); }
+            20% { transform: translate(calc(-50% - 0.3%), calc(-50% + 0.3%)) rotate(0.3deg); }
+            30% { transform: translate(-50%, -50%) rotate(0deg); }
+            40% { transform: translate(calc(-50% + 0.3%), calc(-50% - 0.3%)) rotate(0.2deg); }
+            50% { transform: translate(calc(-50% - 0.3%), calc(-50% + 0.3%)) rotate(-0.2deg); }
+            60% { transform: translate(-50%, -50%) rotate(0deg); }
+            70% { transform: translate(calc(-50% + 0.3%), calc(-50% - 0.3%)) rotate(-0.2deg); }
+            80% { transform: translate(calc(-50% - 0.3%), calc(-50% + 0.3%)) rotate(0.2deg); }
+            90% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+
+        #sequence-puzzle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 2rem auto;
+        margin-top: 0rem;
+        width: 90%;
+        max-width: 100%;
+        height: 25vw;
+        color: white;
+        text-align: center;
+        overflow: visible;
+        z-index: 90;
+        }
+
+        #sequence-puzzle h2 {
+        font-size: 2rem;
+        margin-top: -40px;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 8px #00f2fe;
+        }
+
+        #sequence-puzzle ul {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1rem 0;
+        max-width: 1800px;
+        text-align: center;
+        
+        }
+
+        #sequence-puzzle ul li {
+        margin: 0.6rem 0;
+        font-size: 1rem;
+        color: white;
+        }
+
+        #sequence-input,
+        #submit-sequence-btn {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        #sequence-input {
+        font-size: 1.2rem;
+        text-align: center;
+        letter-spacing: 0.5rem;
+        width: 200px;
+        padding: 0.3rem 0;
+        border-radius: 5px;
+        border: none;
+        margin-bottom: 1rem;
+        margin-right: 1rem;
+        margin-top: 1rem;
+        left: 800px;
+        background-color: rgba(0, 242, 254, 0.1);
+        color: #00f2fe;
+        box-shadow: 0 0 10px #00f2fe;
+        }
+
+        #sequence-input-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        }
+
+        #submit-sequence-btn {
+        font-size: 1.2rem;
+        text-align: center;
+        background: #00adb5;
+        border: none;
+        color: black;
+        border-radius: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 15px #00ccd7;
+        transition: background 0.3s ease;
+        margin-top: -0.3rem;
+        }
+
+        #submit-sequence-btn:hover {
+        background: #32e0c4;
+        }
+
+        #sequence-msg {
+        text-align: center;
+        margin-top: 0.5rem;
+        font-size: 1rem;
+        font-weight: bold;
+        min-height: 1.5rem;
+        }
+
+        #sequence-puzzle ul li,
+        #sequence-puzzle label {
+            color: white;
+        }
+
+        #sequence-puzzle p {
+            color: white;
+            font-size: 1rem;
+        }
+
+        #recap-infographic-container {
+            display: none;
+            position: absolute;
+            background: black;
+            text-align: center;
+            max-width: 960px;
+            z-index: 2300;
+        }
+
+        #recap-infographic {
+            position: fixed;
+            max-width: 960px;
+            height: auto;
+            top: 0px;
+            border-radius: 10px;
+        }
+
+        #recap-btn {
+            margin: 0.5rem;
+            max-width: 100%;
+        }
+
+        #back-to-success-btn {
+            position: fixed;
+            top: 445px;
+            right: 425px;
+            z-index: 2300;
+        }
+
+        .clue-image {
+            position: absolute;
+            width: 80px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .seat-left {
+            top: 34.9%;
+            left: 46.6%;
+            width: 7.2%;
+            z-index: 55;
+        }
+        .seat-left:hover,
+        .seat-left:active {
+            transform: scale(1.2);
+        }
+
+        .glass {
+            top: 50.6%;
+            left: 52.8%;
+            width: 3.4%;
+            z-index: 55;
+
+        }
+        .glass:hover,
+        .glass:active {
+            transform: scale(1.2);
+        }
+
+        .window {
+            top: 17%;
+            left: 17.15%;
+            width: 15.4%;
+            z-index: 55;
+        }
+        .window:hover,
+        .window:active {
+            transform: scale(1.15);
+        }
+
+        .ceiling {
+            top: -1%;
+            left: 56%;
+            width: 25%;
+            rotate: 1deg;
+            z-index: 55;
+        }
+        .ceiling:hover,
+        .ceiling:active {
+            transform: scale(1.15);
+        }
+
+        .seat-right {
+            top: 26%;
+            left: 87.2%;
+            width: 11%;
+            z-index: 55;
+        }
+        .seat-right:hover,
+        .seat-right:active {
+            transform: scale(1.2);
+        }
+
+        #shake-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: visible;
+            z-index: 1;
+        }
+
+        .fade-out {
+        animation: fadeOut 0.8s forwards;
+        }
+
+        .fade-in {
+        animation: fadeIn 0.8s forwards;
+        }
+
+        @keyframes fadeOut {
+        from { opacity: 1; }
+        to   { opacity: 0; visibility: hidden; }
+        }
+
+        @keyframes fadeIn {
+        from { opacity: 0; }
+        to   { opacity: 1; }
+        }
+
+        @keyframes flashText {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.2; }
+        }
+
+        #click-to-continue {
+        animation: flashText 1s infinite;
+        }
+
+    </style>
+    </head>
+
+    <body>
+
+    <video id="background-video" autoplay muted loop playsinline>
+        <source src="galaxy.mp4" type="video/mp4">
+    </video>
+
+    <div id="shake-wrapper">
+        <div id="container">
+
+            <video id="cover-video" autoplay muted loop playsinline>
+            <source src="cover page.mp4" type="video/mp4">
+            </video>
+
+            <div id="intro" onclick="showStoryIntro()"></div>
+
+            <div id="story-intro" style="display:none; position:relative; width:100%; height:100%;">
+                <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:url('story\ page.png') center/cover; z-index:1;"></div>
+                
+                <div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; padding:1px; box-sizing:border-box;">
+                    <div id="typing-container" style="margin-top:370px; margin-bottom: 5px; max-width: 80%; font-size: 1.2rem; line-height: 1.3; text-align: center; color:white;"></div>
+                   
+                   <div id="click-to-continue" style="
+                    display: none;
+                    margin-top: 1rem;
+                    font-size: 1rem;
+                    color: #00f2fe;
+                    text-shadow: 0 0 8px #00f2fe;
+                    ">
+                    Click anywhere or press Space to continue.
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="timer">10:00</div>
+
+            <div id="instructions-overlay">
+            <h1>INSTRUCTIONS</h1>
+            <p>Find objects in the plane and click on them to uncover the <u><b>5-digit code</b></u> to the cockpit panel.</p>
+            <p>For each correct answer, a digit of the code will be revealed at the top of the screen.</p>
+            <p>After revealing all 5 digits, click on the cockpit to enter the code and escape!</p>
+            <button onclick="closeInstructionsPage()">CLOSE</button>
+            </div>
+
+            <div id="clue-overlay" class="hidden">
+            <h1>CLUES</h1>
+            <p>1. Check the windows and the champagne glasses.</p>
+            <p>2. Check the ceiling of the plane where there are buttons. </p>
+            <p>3. 2 out of 5 of the clues can be found on the headrests of the seats. </p>
+            <button onclick="closeClue()">CLOSE</button>
+            </div>
+
+            <div id="screen" style="display:none">
+            <button id="instructions-btn" onclick="showInstructionsPage()">INSTRUCTIONS</button>
+            <button id="clue-btn" onclick="showClue()">CLUE</button>
+            <img src="seatleft.png" class="clue-image seat-left" onclick="loadQuestion(0)">
+            <img src="glass.png" class="clue-image glass" onclick="loadQuestion(1)">
+            <img src="window.png" class="clue-image window" onclick="loadQuestion(2)">
+            <img src="ceiling.png" class="clue-image ceiling" onclick="loadQuestion(3)">
+            <img src="seatright.png" class="clue-image seat-right" onclick="loadQuestion(4)">
+
+            <button id="enter-cockpit-btn" class="hidden pulse-glow" onclick="showCodeEntry()">💻 Enter the Cockpit!</button>
+
+            <div id="textbox"></div>
+
+            <div id="code-entry">
+
+                <div id="sequence-puzzle" class="hidden">
+                <h2>🔐 Sequence Puzzle</h2>
+                <p>Solve these riddles to find the correct sequence:</p>
+                <ul id="riddle-list">
+                    <li><strong>1st Digit</strong> - Double me and you get four.</li>
+                    <li><strong>2nd Digit</strong> - Alone, I stand the very first.</li>
+                    <li><strong>3rd Digit</strong> - I’m the days that make a week.</li>
+                    <li><strong>4th Digit</strong> - Count me and you’ll find a high five.</li>
+                    <li><strong>5th Digit</strong> - I make up the sides of a triangle.</li>
+                </ul>
+
+                <div id="sequence-input-row">
+                    <input type="text" maxlength="5" id="sequence-input" placeholder=" -----" />
+                    <button id="submit-sequence-btn" onclick="checkCode()" class="pulse">SUBMIT</button>
+                </div>
+                <div id="sequence-msg"></div>
+                </div>
+            </div>
+            </div>
+
+            <div id="code-lock">? ? ? ? ?</div>
+        </div>
+
+        <div id="end-screen-message">
+            <h1>⏰ TIME'S UP!</h1>
+            <p>You failed to escape.</p>
+            <button onclick="location.reload()" style=background:#03dbe7>PLAY AGAIN</button>
+            </div>
+
+            <div id="success-screen-message">
+            <h1 style="font-size: 3rem; margin-top: 160px; margin-bottom: 40px; margin-left: 168px; margin-right: 168px;">🎉 CONGRATULATIONS</h1>
+            <p style="font-size: 1.6rem;">You have successfully escaped the plane!</p>
+            <button id="recap-btn" style="margin-left: 200px;">VIEW RECAP</button>
+            <button onclick="location.reload()" style="margin-bottom: 110px; margin-right: 200px;">PLAY AGAIN</button>
+            </div>
+
+            <div id="recap-infographic-container">
+            <video id="recap-infographic" autoplay muted playsinline>
+                <source src="summary infographic.mp4" type="video/mp4">
+            </video>
+            <button id="back-to-success-btn">BACK</button>
+            </div>
+
+        <audio id="click-sound" src="click.mp3" preload="auto"></audio>
+        <audio id="background-music" src="adventure music.mp3" preload="auto"></audio>
+        <audio id="correct-sound" src="correct.mp3" preload="auto"></audio> 
+        <audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
+        <audio id="keyboard-typing" src="keyboard typing.mp3" preload="auto"></audio>
+        <audio id="timer-ending" src="timer ending.mp3" preload="auto"></audio>
+        <audio id="times-up" src="times up.mp3" preload="auto"></audio>
+        <audio id="escape-success" src="escape success.mp3" preload="auto"></audio>
+        <audio id="enter-cockpit" src="enter cockpit.mp3" preload="auto"></audio>
+
+
+        <script>
+
+        console.log('Begin button exists:', !!document.getElementById('begin-button'));
+        console.log('Screen exists:', !!document.getElementById('screen'));
+
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+            const clickSound = document.getElementById('click-sound');
+            clickSound.currentTime = 0;
+            clickSound.play();
+            });
+        });
+
+            document.getElementById('recap-btn').addEventListener('click', () => {
+                document.getElementById('success-screen-message').style.display = 'none';
+                document.getElementById('recap-infographic-container').style.display = 'block';
+            });
+
+            document.getElementById('back-to-success-btn').addEventListener('click', () => {
+                document.getElementById('recap-infographic-container').style.display = 'none';
+                document.getElementById('success-screen-message').style.display = 'block';
+            });
+
+        </script>
+
+        <script>
+
+            let timerDuration = 1 * 60;
+            let timerInterval;
+
+            const questions = [
+            {
+                q: "An online friend of yours asks you to send an image of yourself in a dress for his “personal” reasons. He recently learnt to create deepfake videos using AI using images. What will you do?",
+                digit: 7,
+                answers: [
+                { text: "Send the image to keep your friendship.", correct: false, explanation: "Wrong! AI can generate images or deepfake, resulting in possible inappropriate uses or online grooming. Instead, block the person and confide in a trusted adult!" },
+                { text: "Block your friend and confide in a trusted adult.", correct: true, explanation: "Correct! This may have been online grooming. You should never send pictures of yourself to anyone!" },
+                ]
+            },
+            {
+                q: "Your long-lost cousin texts you stating that he has a high-paying job offer for you, but he requires your bank account details and password to process your salary. The text seems AI-generated. What will you do?",
+                digit: 3,
+                answers: [
+                { text: "Refuse and verify the account of the messenger with a trusted adult.", correct: true, explanation: "Correct! You should always verify your sources whenever in doubt as someone may be impersonating your cousin." },
+                { text: "Give him your bank details and password.", correct: false, explanation: "Wrong! AI could have mass-sent these scam messages. Your account risks getting hacked by a person impersonating your cousin. You should never give anyone your bank account details and password!" },
+                ]
+            },
+            {
+                q: "You received a call claiming that someone created an embarrassing picture of you using AI. The person threatened to publish the picture to the public, unless you send them money. What will you do?",
+                digit: 1,
+                answers: [
+                { text: "Approach a trusted adult or the platform immediately.", correct: true, explanation: "Correct! This was a case of image abuse. Contact a trusted adult for help." },
+                { text: "Send them the money to avoid further conflict.", correct: false, explanation: "Wrong! AI should not be used to threaten others. You may have been a victim of image abuse. You should never condemn these behaviours!" },
+                ]
+            },
+            {
+                q: "You received an email claiming to be the bank, stating that your account is under risk of being compromised. You have to click on the link in the email and key in your personal details. The bank logo seems AI-generated. What will you do?",
+                digit: 2,
+                answers: [
+                { text: "Ignore the link and delete the email.", correct: true, explanation: "Correct! You did not fall for the phishing scam. Always verify the sender’s identity before trusting their content." },
+                { text: "Click on the link and key in your personal details.", correct: false, explanation: "Wrong! AI can create realistic images. It may be a phishing link and the email may not have been official. Instead, you should verify the sender’s identity and block them if needed." },
+                ]
+            },
+            {
+                q: "You received a realistic AI-generated voice call saying that a payment was accidentally made to you and the other party demands for a refund to be transferred to their account. You have never made any transfer in the past few days. What will you do?",
+                digit: 5,
+                answers: [
+                { text: "Send them the money and assume you had been mistaken.", correct: false, explanation: "Wrong! AI can mimic realistic voice. You should never trust people online easily and always verify your account when in doubt. You may have been scammed!" },
+                { text: "Verify your transfer history and decline their request.", correct: true, explanation: "Correct! You did not fall for the scam. You did the right thing by verifying your account activity and declining their request." },
+                ]
+            }
+            ];
+
+            let collectedDigits = [null, null, null, null, null];
+
+            function typeParagraph(paragraphs, containerId, typingSpeed, callback) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = "";
+                let pIndex = 0;
+
+                function typeSingleParagraph(text, onDone) {
+                    const p = document.createElement('p');
+                    container.appendChild(p);
+
+                    let i = 0;
+                    const interval = setInterval(() => {
+                        p.textContent += text.charAt(i);
+                        i++;
+                        if (i >= text.length) {
+                            clearInterval(interval);
+                            if (onDone) onDone();
+                        }
+                    }, typingSpeed);
+                }
+
+                function typeNext() {
+                    if (pIndex < paragraphs.length) {
+                        typeSingleParagraph(paragraphs[pIndex], () => {
+                            pIndex++;
+                            typeNext();
+                        });
+                    } else {
+                        if (callback) callback();
+                    }
+                }
+
+                typeNext();
+            }
+
+            let storyLines = [
+            "🚨 Emergency! You woke up on a hijacked plane. 🚨",
+            "⚡️ Beware! The engineers hid the code digits around the plane to stop hackers. ⚡️",
+            "⚠️  MISSION: Explore the plane, find hidden clues, and answer questions to uncover each digit of the code.  ⚠️",
+            "🔎  There are INSTRUCTION and CLUE buttons at the top of your screen to help you!  🔎",
+            "🔢  All digits that you have found will be shown at the top too.  🔢",
+            "✈️  Once you have revealed all the digits, enter the cockpit and a final sequence puzzle awaits.  ✈️",
+            "💡  Solve the riddles to discover the correct sequence of the numbers to get the code and escape!  💡",
+            "⏳  Be quick! Time is ticking.  ⏳",
+            "🔐  Can you unlock the code before the clock runs out?  🔐",
+            "🎉  Good luck and hope you escape successfully!  🎉"
+            ];
+
+            let currentLine = 0;
+            let isTyping = false;
+
+            function typeLine(text, containerId, speed = 30) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            let i = 0;
+            isTyping = true;
+
+            const typingAudio = document.getElementById('keyboard-typing');
+            typingAudio.currentTime = 0;
+            typingAudio.play();
+
+            const interval = setInterval(() => {
+                container.textContent += text.charAt(i);
+                i++;
+                if (i >= text.length) {
+                clearInterval(interval);
+                isTyping = false;
+
+                typingAudio.pause();
+                typingAudio.currentTime = 0;
+
+                const clickToContinue = document.getElementById('click-to-continue');
+                if (currentLine === storyLines.length) {
+                    clickToContinue.textContent = "Click anywhere or press Space to start.";
+                } else {
+                    clickToContinue.textContent = "Click anywhere or press Space to continue.";
+                }
+                
+                setTimeout(() => {
+                    document.getElementById('click-to-continue').style.display = 'block';
+                }, 200);
+                }
+            }, speed);
+            }
+
+            function startStoryLines() {
+
+            function showNextLine() {
+                document.getElementById('click-to-continue').style.display = 'none';
+
+                if (currentLine < storyLines.length) {
+                typeLine(storyLines[currentLine], 'typing-container');
+                currentLine++;
+                } else {
+                document.removeEventListener('click', clickHandler);
+
+                const audio = document.getElementById('keyboard-typing');
+                audio.pause();
+                audio.currentTime = 0;
+
+                startGame();
+                }
+            }
+
+            function clickHandler() {
+                if (!isTyping) {
+                showNextLine();
+                }
+            }
+
+            function keydownHandler(event) {
+                if (event.code === 'Space' && !isTyping) {
+                    event.preventDefault();
+                    showNextLine();
+                }
+            }
+
+            showNextLine(); 
+            document.addEventListener('click', clickHandler);
+            document.addEventListener('keydown', keydownHandler);
+            }
+
+            function showStoryIntro() {
+                const intro = document.getElementById('intro');
+                intro.classList.add('fade-out');
+
+                setTimeout(() => {
+                    intro.style.display = 'none';
+
+                    const storyIntro = document.getElementById('story-intro');
+                    storyIntro.style.display = 'flex';
+                    storyIntro.style.opacity = '0';
+
+                    intro.classList.add('fade-out');
+                    storyIntro.classList.add('fade-in');
+
+                    setTimeout(() => {
+                        intro.style.display = 'none';
+                    }, 300);
+
+                    const coverVideo = document.getElementById('cover-video');
+                    if (coverVideo) {
+                    coverVideo.pause();
+                    coverVideo.style.display = 'none';
+                    }
+
+                    const audio = document.getElementById('keyboard-typing');
+                    audio.loop = true;
+                    audio.play().catch(e => console.log("Autoplay blocked"));
+
+                    startStoryLines()
+        }, 800);
+        }
+
+            function skipInstructions() {
+            typingStopped = true;
+            const typingContainer = document.getElementById('typing-container');
+
+            const paragraphs = [
+                    "Escape before it's too late! Use the cockpit panel to unlock the secret emergency door.",
+                    "",
+                    "Find objects in the plane and click on them to uncover the 5-digit code to the cockpit panel.",
+                    "For each correct answer, a digit of the code will be revealed at the top of the screen.", 
+                    "After revealing all 5 digits, click on the cockpit to enter the code and escape!",
+                    "",
+                    "Hint: There are clues and instructions button to help you!",
+
+            ];
+
+            typingContainer.innerHTML = '';
+            paragraphs.forEach(text => {
+                if (text === "") {
+                    const br = document.createElement('br');
+                    typingContainer.appendChild(br);
+                } else {
+                    const p = document.createElement('p');
+                    p.textContent = text;
+                    typingContainer.appendChild(p);
+                }
+            });
+
+            document.getElementById('button').classList.remove('hidden');
+            document.getElementById('skip-button').style.display = 'none';
+
+            const typingAudio = document.getElementById('keyboard-typing');
+            typingAudio.pause();
+            typingAudio.currentTime = 0;
+            }
+
+            function showInstructionsPage() {
+            document.getElementById('instructions-overlay').style.display = 'block';
+            }
+
+            function closeInstructionsPage() {
+            document.getElementById('instructions-overlay').style.display = 'none';
+            }
+
+            function showClue() {
+            document.getElementById('clue-overlay').style.display = 'block';
+            }
+
+            function closeClue() {
+            document.getElementById('clue-overlay').style.display = 'none';
+            }
+
+
+            function startGame() {
+
+                const storyIntro = document.getElementById('story-intro');
+                const screen = document.getElementById('screen');
+
+                screen.style.display = 'block';
+                screen.style.opacity = '0';
+
+                storyIntro.classList.add('fade-out');
+                screen.classList.add('fade-in');
+
+                setTimeout(() => {
+                    storyIntro.style.display = 'none';
+                }, 300);
+                
+                const typingAudio = document.getElementById('keyboard-typing');
+                typingAudio.pause();
+                typingAudio.currentTime = 0;
+                typingAudio.volume = 0;
+
+                document.getElementById('story-intro').style.display = 'none';
+                document.getElementById('intro').style.display = 'none';
+                
+                document.getElementById('screen').style.display = 'block';
+                document.getElementById('code-lock').style.display = 'block';
+                document.getElementById('timer').style.display = 'block';
+                document.getElementById('instructions-btn').style.display = 'block';
+                startTimer();
+
+                clearTextbox();
+                
+                const bgMusic = document.getElementById('background-music');
+                bgMusic.loop = true;
+                bgMusic.volume = 0.1;
+                bgMusic.play();
+            }
+
+            let typingStopped = false;
+
+            function typeParagraph(paragraphs, containerId, speed = 40, callback = null) {
+                const container = document.getElementById(containerId);
+                let pIndex = 0;
+                let charIndex = 0;
+                typingStopped = false;
+
+                function type() {
+                    if (typingStopped) {
+                    return;
+                    }
+                    if (pIndex >= paragraphs.length) {
+                        if (callback) callback();
+                        return;
+                    }
+                    if (charIndex === 0) {
+                        if (paragraphs[pIndex] === "") {
+                            const br = document.createElement('br');
+                            container.appendChild(br);
+                            pIndex++;
+                            setTimeout(type, 200);
+                            return;
+                        }
+                        const p = document.createElement('p');
+                        p.id = 'typing-p-' + pIndex;
+                        container.appendChild(p);
+                    }
+                    const currentP = document.getElementById('typing-p-' + pIndex);
+                    currentP.textContent += paragraphs[pIndex].charAt(charIndex);
+                    charIndex++;
+                    if (charIndex < paragraphs[pIndex].length) {
+                        setTimeout(type, speed);
+                    } else {
+                        charIndex = 0;
+                        pIndex++;
+                        setTimeout(type, 500);
+                    }
+                }
+                type();
+            }
+
+            function typeparagraphtwo(paragraphs, containerId, speed = 40, callback = null) {
+                const container = document.getElementById(containerId);
+                let pIndex = 0;
+                let charIndex = 0;
+                typingStopped = false;
+
+                function type() {
+                    if (typingStopped) {
+                    return;
+                    }
+                    if (pIndex >= paragraphs.length) {
+                        if (callback) callback();
+                        return;
+                    }
+                    if (charIndex === 0) {
+                        if (paragraphs[pIndex] === "") {
+                            const br = document.createElement('br');
+                            container.appendChild(br);
+                            pIndex++;
+                            setTimeout(type, 200);
+                            return;
+                        }
+                        const p = document.createElement('p');
+                        p.id = 'typing-p-' + pIndex;
+                        container.appendChild(p);
+                    }
+                    const currentP = document.getElementById('typing-p-' + pIndex);
+                    currentP.textContent += paragraphs[pIndex].charAt(charIndex);
+                    charIndex++;
+                    if (charIndex < paragraphs[pIndex].length) {
+                        setTimeout(type, speed);
+                    } else {
+                        charIndex = 0;
+                        pIndex++;
+                        setTimeout(type, 500);
+                    }
+                }
+                type();
+            }
+
+            function updateCodeLock() {
+            const codeLock = document.getElementById('code-lock');
+            const displayCode = collectedDigits.map(d => d === null ? '?' : d).join(' ');
+            codeLock.textContent = displayCode;
+            }
+
+            function clearTextbox() {
+            const textbox = document.getElementById('textbox');
+            textbox.innerHTML = '';
+            textbox.style.display = 'none';
+            }
+
+            function loadQuestion(index) {
+            const textbox = document.getElementById('textbox');
+            const audio = document.getElementById('click-sound');
+            audio.play();
+
+            if (collectedDigits[index] !== null) {
+                textbox.style.display = 'block';
+                textbox.innerHTML =
+                `<p style='margin-top: 50px;'>You already solved this: <strong>${questions[index].answers.find(a => a.correct).text}</strong></p>`;
+                setTimeout(() => {
+                clearTextbox();
+                }, 4000);
+                return;
+            }
+
+            const q = questions[index];
+            textbox.style.display = 'block';
+            let html = `<h3>${q.q}</h3>`;
+            q.answers.forEach((ans, i) => {
+                html += `<button class="answer-btn" onclick="selectAnswer(${index}, ${i})">${ans.text}</button>`;
+            });
+            html += `<div id="explanation" class="explanation"></div>`;
+            textbox.innerHTML = html;
+            }
+
+            function selectAnswer(questionIndex, answerIndex) {
+            const q = questions[questionIndex];
+            const answer = q.answers[answerIndex];
+            const explanationDiv = document.getElementById('explanation');
+            const textbox = document.getElementById('textbox');
+            const audio = document.getElementById('click-sound');
+            audio.play();
+
+            const buttons = textbox.querySelectorAll('button.answer-btn');
+            buttons.forEach(btn => btn.disabled = true);
+
+            explanationDiv.textContent = answer.explanation;
+
+            if (answer.correct) {
+                collectedDigits[questionIndex] = q.digit;
+                document.getElementById('sequence-input').addEventListener('keydown', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        checkCode();
+                    }
+                });
+                updateCodeLock();
+
+                const successMsg = document.createElement('p');
+                successMsg.style.color = '#7CFC00';
+                successMsg.style.marginTop = '0.7rem';
+                successMsg.textContent = `Correct! You've discovered a digit: ${q.digit}`;
+                explanationDiv.appendChild(successMsg);
+                const audio = document.getElementById('correct-sound');
+                audio.play();
+
+                setTimeout(() => {
+                clearTextbox();
+                }, 3000);
+            } else {
+                const audio = document.getElementById('wrong-sound');
+                audio.play();
+                setTimeout(() => {
+                clearTextbox();
+                }, 3000);
+            }
+            }
+
+            function showCodeEntry() {
+            const codeEntry = document.getElementById('code-entry');
+            const textbox = document.getElementById('textbox');
+            const sequencePuzzle = document.getElementById('sequence-puzzle');
+            const audio = document.getElementById('click-sound');
+            audio.play();
+
+            const container = document.getElementById('container');
+
+            document.getElementById('enter-cockpit-btn').classList.add('hidden');
+
+            if (collectedDigits.includes(null)) {
+                textbox.style.display = 'block';
+                textbox.innerHTML = "<p style='margin-top: 50px;'>You need to find all 5 digits before unlocking the panel!</p>";
+                setTimeout(() => {
+                clearTextbox();
+                }, 3000);
+                return;
+            }
+
+            textbox.style.display = 'none';
+            codeEntry.style.display = 'flex';
+
+            sequencePuzzle.classList.remove('hidden');
+            document.getElementById('sequence-input').style.display = 'block';
+            document.getElementById('escape-msg').textContent = '';
+            document.getElementById('sequence-input').value = '';
+            document.getElementById('sequence-msg').textContent = '';
+            }
+
+            function checkCode() {
+            const codeInput = document.getElementById('sequence-input').value.replace(/\s/g, '');
+            const msg = document.getElementById('sequence-msg');
+            const correctCode = "21753";
+
+            if (codeInput === correctCode) {
+                document.getElementById('success-screen-message').style.display = 'block';
+                document.getElementById('code-entry').style.display = 'none';
+                document.getElementById('code-lock').style.display = 'none';
+                document.getElementById('timer').style.display = 'none';
+
+                const audio = document.getElementById('escape-success');
+                audio.play();
+
+                const bgMusic = document.getElementById('background-music');
+                if (bgMusic) {
+                bgMusic.pause();
+                }
+
+                const endingAudio = document.getElementById('timer-ending');
+                endingAudio.pause();
+                endingAudio.currentTime = 0;
+
+                const timesUpAudio = document.getElementById('times-up');
+                timesUpAudio.pause();
+                timesUpAudio.currentTime = 0;
+
+                clearInterval(timerInterval);
+
+            } else {
+                msg.textContent = '❌ Incorrect Code.';
+                msg.style.color = '#ff3333';
+                const audio = document.getElementById('wrong-sound');
+                audio.play();
+            }
+            }
+            
+            updateCodeLock();
+
+            function updateCodeLock() {
+            const codeLock = document.getElementById('code-lock');
+            const displayCode = collectedDigits.map(d => d === null ? '?' : d).join(' ');
+            codeLock.textContent = displayCode;
+
+            if (!collectedDigits.includes(null)) {
+
+                setTimeout(() => {
+                document.getElementById('enter-cockpit-btn').classList.remove('hidden');
+                const audio = document.getElementById('enter-cockpit');
+                audio.currentTime = 0;
+                audio.play();
+                }, 1000);
+            }
+            }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById('timer');
+            const container = document.getElementById('container');
+
+            
+            function updateTimer() {
+                const minutes = Math.floor(timerDuration / 60);
+                const seconds = timerDuration % 60;
+                timerDisplay.textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timerDuration === 5) {
+                    const endingAudio = document.getElementById('timer-ending');
+                    endingAudio.currentTime = 0;
+                    endingAudio.play();
+                }
+
+                if (timerDuration === 10) {
+                    console.log(container.className);
+                    container.classList.add('flash-siren');
+                }
+
+                if (timerDuration <= 0) {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = "Time's up!";
+                container.classList.remove('flash-siren');
+                handleGameOver();
+                }
+
+                timerDuration--;
+            }
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+            }
+
+            function handleGameOver() {
+                
+                const container = document.getElementById('container');
+                container.style.display = 'none';
+
+                const endScreen = document.getElementById('end-screen-message');
+                endScreen.style.display = 'flex';
+                endScreen.style.opacity = '0';
+
+                container.classList.add('fade-out');
+                endScreen.classList.add('fade-in');
+
+                setTimeout(() => {
+                    container.style.display = 'none';
+                }, 300);
+
+                const audio = document.getElementById('times-up');
+                audio.play();
+
+                setTimeout(() => {
+                    fadeOutAudio(audio, 1000);
+                }, 5000);
+
+                const bgMusic = document.getElementById('background-music');
+                if (bgMusic) {
+                    bgMusic.pause();
+                }
+            }
+
+            function fadeOutAudio(audioElement, duration) {
+                const fadeInterval = 100;
+                const fadeStep = audioElement.volume / (duration / fadeInterval);
+
+                const fade = setInterval(() => {
+                    if (audioElement.volume - fadeStep > 0) {
+                    audioElement.volume -= fadeStep;
+                    } else {
+                    audioElement.volume = 0;
+                    audioElement.pause();
+                    audioElement.currentTime = 0;
+                    clearInterval(fade);
+                    }
+                }, fadeInterval);
+            }
+
+        </script>
+        </div>
+        
+    </body></html>
